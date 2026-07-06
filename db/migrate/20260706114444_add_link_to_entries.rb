@@ -1,0 +1,5 @@
+class AddLinkToEntries < ActiveRecord::Migration[8.1]
+  def change
+    add_column :entries, :link, :string
+  end
+end
