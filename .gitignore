@@ -92,3 +92,6 @@ build-iPhoneSimulator/
 /config/*.key
 
 >>>>>>> 9ed866c (its working)
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
