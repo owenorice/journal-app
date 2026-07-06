@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  
+
   def index
     @entries = Entry.all
   end
@@ -17,9 +17,14 @@ class EntriesController < ApplicationController
     end
   end
 
+  def destroy
+    Entry.find(params[:id]).destroy
+    redirect_to root_url
+  end
+
   private 
 
   def entry_params
-    params.require(:entry).permit(:name)
+    params.require(:entry).permit(:name, :link)
   end
 end
