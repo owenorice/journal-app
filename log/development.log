@@ -4172,3 +4172,102 @@ Completed 200 OK in 4ms (Views: 2.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached
 
 
   [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='JournalApp'*/[0m
+Started GET "/entries/new" for 127.0.0.1 at 2026-07-06 15:11:28 +0100
+Processing by EntriesController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering entries/new.html.erb within layouts/application
+  Rendered entries/new.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.1ms | GC: 0.0ms)
+Completed 200 OK in 4ms (Views: 2.6ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-07-06 15:11:31 +0100
+Processing by EntriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering entries/index.html.erb within layouts/application
+  [1m[36mEntry Load (11.8ms)[0m  [1m[34mSELECT "entries".* FROM "entries" /*action='index',application='JournalApp',controller='entries'*/[0m
+  ↳ app/views/entries/index.html.erb:4
+  Rendered entries/index.html.erb within layouts/application (Duration: 13.1ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 14.2ms | GC: 0.0ms)
+Completed 200 OK in 17ms (Views: -1.5ms | ActiveRecord: 16.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-07-06 15:11:32 +0100
+Processing by EntriesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering entries/index.html.erb within layouts/application
+  [1m[36mEntry Load (0.4ms)[0m  [1m[34mSELECT "entries".* FROM "entries" /*action='index',application='JournalApp',controller='entries'*/[0m
+  ↳ app/views/entries/index.html.erb:4
+  Rendered entries/index.html.erb within layouts/application (Duration: 1.5ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.7ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 2.9ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/entries/new" for 127.0.0.1 at 2026-07-06 15:11:33 +0100
+Processing by EntriesController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering entries/new.html.erb within layouts/application
+  Rendered entries/new.html.erb within layouts/application (Duration: 1.7ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.6ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.2ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started POST "/entries" for 127.0.0.1 at 2026-07-06 15:11:35 +0100
+Processing by EntriesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token" => "[FILTERED]", "entry" => {"name" => "ee", "link" => "aa"}, "commit" => "Create Entry"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='create',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:13:in 'EntriesController#create'
+  [1m[36mEntry Create (1.5ms)[0m  [1m[32mINSERT INTO "entries" ("name", "created_at", "updated_at", "link") VALUES ('ee', '2026-07-06 14:11:35.230298', '2026-07-06 14:11:35.230298', 'aa') RETURNING "id" /*action='create',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:13:in 'EntriesController#create'
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[35mCOMMIT /*action='create',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:13:in 'EntriesController#create'
+Redirected to http://127.0.0.1:3000/
+↳ app/controllers/entries_controller.rb:14:in 'EntriesController#create'
+Completed 302 Found in 9ms (ActiveRecord: 4.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-07-06 15:11:35 +0100
+Processing by EntriesController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering entries/index.html.erb within layouts/application
+  [1m[36mEntry Load (0.3ms)[0m  [1m[34mSELECT "entries".* FROM "entries" /*action='index',application='JournalApp',controller='entries'*/[0m
+  ↳ app/views/entries/index.html.erb:4
+  Rendered entries/index.html.erb within layouts/application (Duration: 2.1ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.0ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started DELETE "/entries/23" for 127.0.0.1 at 2026-07-06 15:11:36 +0100
+Processing by EntriesController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token" => "[FILTERED]", "id" => "23"}
+  [1m[36mEntry Load (0.5ms)[0m  [1m[34mSELECT "entries".* FROM "entries" WHERE "entries"."id" = 23 LIMIT 1 /*action='destroy',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:21:in 'EntriesController#destroy'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN /*action='destroy',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:21:in 'EntriesController#destroy'
+  [1m[36mEntry Destroy (1.0ms)[0m  [1m[31mDELETE FROM "entries" WHERE "entries"."id" = 23 /*action='destroy',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:21:in 'EntriesController#destroy'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT /*action='destroy',application='JournalApp',controller='entries'*/[0m
+  ↳ app/controllers/entries_controller.rb:21:in 'EntriesController#destroy'
+Redirected to http://127.0.0.1:3000/
+↳ app/controllers/entries_controller.rb:22:in 'EntriesController#destroy'
+Completed 302 Found in 7ms (ActiveRecord: 2.2ms (2 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2026-07-06 15:11:36 +0100
+Processing by EntriesController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering entries/index.html.erb within layouts/application
+  [1m[36mEntry Load (0.3ms)[0m  [1m[34mSELECT "entries".* FROM "entries" /*action='index',application='JournalApp',controller='entries'*/[0m
+  ↳ app/views/entries/index.html.erb:4
+  Rendered entries/index.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered shared/_navbar.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | GC: 0.0ms)
+Completed 200 OK in 5ms (Views: 3.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC /*application='JournalApp'*/[0m
