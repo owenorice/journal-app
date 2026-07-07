@@ -3,12 +3,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "state_rg" {
-  name     = "rg-terraform-state"
+  name     = "rg-journal-app"
   location = "West Europe"
 }
 
 resource "azurerm_storage_account" "state_sa" {
-  name                     = "crawlerstate${random_id.suffix.hex}" // has to be globally unqiue id
+  name                     = "tfstate-storage-${random_id.suffix.hex}" // has to be globally unqiue id
   resource_group_name      = azurerm_resource_group.state_rg.name
   location                 = azurerm_resource_group.state_rg.location
   account_tier             = "Standard"
