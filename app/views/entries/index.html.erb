@@ -1,8 +1,16 @@
-<h1>All Entries</h1>
-<div>
-  <% @entries.each do |entry| %>
-    <%= entry.name %>
-    <%= entry.link %>
-    <%= button_to "Delete", entry, method: :delete, data: { confirm: "Are you sure you want to delete this Project?"} %>
-  <% end %>
+<div class="container my-5">
+  <h1 class="mb-4">All Entries</h1>
+  <div class="row">
+    <% @entries.each do |entry| %>
+      <div class="col-md-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= entry.name %></h5>
+            <p class="card-text"><%= link_to entry.link, entry.link, target: "_blank" %></p>
+            <%= button_to "Delete", entry, method: :delete, class: "btn btn-outline-danger btn-sm", data: { confirm: "Are you sure you want to delete this entry?"} %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
