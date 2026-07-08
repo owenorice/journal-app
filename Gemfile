@@ -21,6 +21,7 @@ gem 'bootstrap', '>= 5.3.8'
 
 gem 'dartsass-rails'
 
+gem 'devise', '>= 5.0.4'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
