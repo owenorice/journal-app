@@ -18,6 +18,22 @@ body {
   color: #333;
 }
 
+.navbar {
+  font-size: 0.85rem;
+
+  .navbar-brand {
+    font-size: 0.95rem;
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: #000;
 }
@@ -25,4 +41,207 @@ h1, h2, h3, h4, h5, h6 {
 .container {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+// ── Two-column map layout ──
+.map-layout {
+  display: flex;
+  height: calc(100vh - 36px); // full height below compact navbar
+  overflow: hidden;
+
+  &__map {
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: hidden;
+    border-right: 1px solid #dee2e6;
+    background: #f8f9fa;
+  }
+
+  &__entries {
+    flex: 1 1 50%;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+  }
+}
+
+// On narrow screens, stack vertically
+@media (max-width: 767.98px) {
+  .map-layout {
+    flex-direction: column;
+    height: auto;
+
+    &__map {
+      border-right: none;
+      border-bottom: 1px solid #dee2e6;
+      max-height: 50vh;
+    }
+
+    &__entries {
+      max-height: none;
+      overflow-y: visible;
+    }
+  }
+}
+
+// ── Map container ──
+.map-container {
+  position: relative;
+  display: block;
+  cursor: default;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+}
+
+.map-hint {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin: 0;
+
+  kbd {
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    padding: 0 4px;
+  }
+}
+
+// ── Map pins ──
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: default;
+  z-index: 10;
+
+  &__delete {
+    display: none;
+    position: absolute;
+    top: -0.25rem;
+    right: -0.75rem;
+    font-size: 0.5rem;
+  }
+
+  &:hover &__delete {
+    display: inline-block;
+  }
+
+  &__label {
+    display: none;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    padding: 2px 6px;
+    border-radius: 3px;
+    pointer-events: none;
+  }
+
+  &:hover &__label {
+    display: block;
+  }
+
+  &--highlighted {
+    filter: drop-shadow(0 0 6px #0d6efd);
+    transform: translate(-50%, -100%) scale(1.3);
+    transition: transform 0.15s ease, filter 0.15s ease;
+    z-index: 20;
+
+    .map-pin__label {
+      display: block;
+    }
+  }
+}
+
+@keyframes pin-pulse {
+  0%   { transform: translate(-50%, -120%) scale(1.4); }
+  100% { transform: translate(-50%, -100%) scale(1); }
+}
+
+#pins-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  .map-pin {
+    pointer-events: auto;
+  }
+}
+
+.map-placing-mode {
+  cursor: crosshair !important;
+  outline: 3px solid #0d6efd;
+  outline-offset: -3px;
+}
+
+// ── Entry rows (right column) ──
+.entry-row {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #dee2e6;
+  transition: background 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: #f0f4ff;
+  }
+
+  &__thumb {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: #fff;
+  }
+
+  &__details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__list {
+    list-style: disc;
+    padding-left: 1.2rem;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.15rem;
+    }
+
+    a {
+      word-break: break-all;
+    }
+  }
 }

@@ -1,8 +1,15 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
   <div class="container">
     <%= link_to "🪴 Plantae", root_path, class: "navbar-brand" %>
     <div class="navbar-nav">
       <%= link_to "New Entry", new_entry_path, class: "nav-link" %>
+    </div>
+    <div class="navbar-nav ms-auto">
+      <% if user_signed_in? %>
+        <%= button_to "Logout", destroy_user_session_path, method: :delete, class: "nav-link btn btn-link" %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+      <% end %>
     </div>
   </div>
 </nav>

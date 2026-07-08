@@ -1,0 +1,12 @@
+<div id="pin-<%= pin.id %>"
+     class="map-pin"
+     style="left: <%= pin.x_percent %>%; top: <%= pin.y_percent %>%;"
+     data-entry-id="<%= pin.entry_id %>"
+     data-action="mouseenter->map#highlightEntry mouseleave->map#unhighlightEntry">
+  📍
+  <span class="map-pin__label"><%= pin.entry.name %></span>
+  <%= button_to "✕", pin_path(pin),
+        method: :delete,
+        class: "map-pin__delete",
+        form: { data: { turbo_stream: true } } %>
+</div>

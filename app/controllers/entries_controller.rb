@@ -2,6 +2,7 @@ class EntriesController < ApplicationController
 
   def index
     @entries = Entry.all
+    @pins    = Pin.all
   end
 
   def new

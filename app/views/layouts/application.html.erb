@@ -8,9 +8,17 @@
 
    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
    <%= javascript_importmap_tags %>
+
+   <%= favicon_link_tag 'favicon.svg' %>
  </head>
 
  <body>
+   <% if notice %>
+     <p class="alert alert-info"><%= notice %></p>
+   <% end %>
+   <% if alert %>
+     <p class="alert alert-danger"><%= alert %></p>
+   <% end %>
    <%= render '/shared/navbar' %>
    <%= yield %>
  </body>
