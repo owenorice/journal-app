@@ -37,3 +37,7 @@ The following secrets need to be generated and entered under the 'Terraform' env
     *  Take the output of this command, and replace <APP_ID> in the following command with it
     > `az ad app federated-credential create --id <APP_ID> --parameters '{ "name": "journal-app-trust", "issuer": "https://token.actions.githubusercontent.com", "subject": "repo:<ORG>/<REPO>:environment:Terraform", "description": "Trust GitHub Actions for main branch", "audiences": ["api://AzureADTokenExchange"] }'`
     * Replace <ORG> with the name of the owner of the GitHub repo, and <REPO> with the name of the GitHub repo.
+
+---
+4) RAILS_MASTER_KEY
+    * The contents of your `config/master.key` file.
