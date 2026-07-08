@@ -34,3 +34,5 @@ jobs:
       - name: Terraform Apply
         working-directory: ./terraform
         run: terraform apply -auto-approve -var="rails_master_key=${{ secrets.RAILS_MASTER_KEY }}"
+      - name: Restart Web App
+        run: az webapp restart --name $(az webapp list --query "[?contains(name, 'app-journalapp')].name" -o tsv) --resource-group rg-journal-app
