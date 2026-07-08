@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema[8.1].define(version: 2026_07_06_114444) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
 
   create_table "entries", force: :cascade do |t|
     t.string "name"

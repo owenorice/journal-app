@@ -9,7 +9,7 @@ az login
 
 # -- 1) BOOTSTRAP --
 echo "Step 2: Creating Bootstrap Infrastructure (Storage for Terraform)..."
-cd ../terraform/bootstrap
+cd ./terraform/bootstrap
 terraform init
 terraform plan
 terraform apply

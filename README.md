@@ -14,7 +14,7 @@ The following secrets need to be generated and entered under the 'Terraform' env
 4) AZURE_TENANT_ID
 
 ### Instructions for generating secrets
-1) AZURE_CLIENT_ID, AZURE_TENANT_ID
+1) AZURE_SUBCSCRIPTION_ID, AZURE_TENANT_ID
     * Navigate to your terminal
     * `az login`
     * `az account show`

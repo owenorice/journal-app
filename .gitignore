@@ -57,3 +57,12 @@ build-iPhoneSimulator/
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+
+# Ignore Logs and Zips
+*.log
+*.zip
+
