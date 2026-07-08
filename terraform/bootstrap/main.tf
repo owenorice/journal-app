@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "state_rg" {
 }
 
 resource "azurerm_storage_account" "state_sa" {
-  name                     = "tfstate-storage-${random_id.suffix.hex}" // has to be globally unqiue id
+  name                     = "tfstatestorage${random_id.suffix.hex}" // has to be globally unqiue id
   resource_group_name      = azurerm_resource_group.state_rg.name
   location                 = azurerm_resource_group.state_rg.location
   account_tier             = "Standard"
