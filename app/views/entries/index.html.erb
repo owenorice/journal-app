@@ -37,7 +37,7 @@
   <div class="map-layout__entries">
     <% @entries.each do |entry| %>
       <div class="entry-row" id="entry-card-<%= entry.id %>"
-           data-action="mouseenter->map#highlightPin mouseleave->map#unhighlightPin"
+           data-action="mouseenter->map#highlight mouseleave->map#unhighlight"
            data-map-entry-id-param="<%= entry.id %>">
 
         <div class="entry-row__thumb">

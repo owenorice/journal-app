@@ -79,24 +79,12 @@ export default class extends Controller {
     document.getElementById("map-hint").style.display = ""
   }
 
-  highlightEntry(event) {
-    const id = event.currentTarget.dataset.entryId
-    document.getElementById(`entry-card-${id}`)?.classList.add("border-primary", "shadow")
+  highlight({ params: { entryId } }) {
+    this.#setHighlight(entryId, true)
   }
 
-  unhighlightEntry(event) {
-    const id = event.currentTarget.dataset.entryId
-    document.getElementById(`entry-card-${id}`)?.classList.remove("border-primary", "shadow")
-  }
-
-  highlightPin({ params: { entryId } }) {
-    this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
-      ?.classList.add("map-pin--highlighted")
-  }
-
-  unhighlightPin({ params: { entryId } }) {
-    this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
-      ?.classList.remove("map-pin--highlighted")
+  unhighlight({ params: { entryId } }) {
+    this.#setHighlight(entryId, false)
   }
 
   // ── Drag-to-pan ──
@@ -217,6 +205,14 @@ export default class extends Controller {
       pin.style.left = `${this.#panX + (xPct / 100) * this.#natW * this.#scale}px`
       pin.style.top  = `${this.#panY + (yPct / 100) * this.#natH * this.#scale}px`
     }
+  }
+
+  #setHighlight(entryId, on) {
+    const card = document.getElementById(`entry-card-${entryId}`)
+    const pin  = this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
+    const method = on ? "add" : "remove"
+    card?.classList[method]("border-primary", "shadow")
+    pin?.classList[method]("map-pin--highlighted")
   }
 
   #fitToView() {

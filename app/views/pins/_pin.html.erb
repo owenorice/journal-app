@@ -3,8 +3,9 @@
      data-x-pct="<%= pin.x_percent %>"
      data-y-pct="<%= pin.y_percent %>"
      data-entry-id="<%= pin.entry_id %>"
-     data-action="mouseenter->map#highlightEntry mouseleave->map#unhighlightEntry">
-  📍
+     data-map-entry-id-param="<%= pin.entry_id %>"
+     data-action="mouseenter->map#highlight mouseleave->map#unhighlight">
+  🪴
   <span class="map-pin__label"><%= pin.entry.name %></span>
   <%= button_to "✕", pin_path(pin),
         method: :delete,
