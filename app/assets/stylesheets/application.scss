@@ -231,8 +231,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   &--highlighted {
-    filter: drop-shadow(0 0 6px #0d6efd);
-    transform: translate(-50%, -100%) scale(1.2);
+    filter: drop-shadow(0 0 4px rgba(74, 144, 217, 0.6));
+    transform: translate(-50%, -100%) scale(1.15);
     transition: transform 0.15s ease, filter 0.15s ease;
     z-index: 20;
 
@@ -261,25 +261,35 @@ h1, h2, h3, h4, h5, h6 {
 .entry-row {
   display: flex;
   gap: 0.75rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #dee2e6;
-  transition: background 0.15s ease;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #eee;
+  border-left: 3px solid transparent;
+  border-radius: 4px;
+  transition: background 0.15s ease, border-color 0.15s ease;
   align-items: center;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: #f0f4ff; }
+  &:last-child { border-bottom-color: transparent; }
+
+  &:hover {
+    background: #f8f9fa;
+  }
+
+  &--active {
+    background: #eef4ff;
+    border-left-color: #4a90d9;
+  }
 
   &__thumb {
     flex-shrink: 0;
-    width: 64px;
-    height: 64px;
-    border: 1px solid #dee2e6;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #e9ecef;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.75rem;
+    font-size: 1.4rem;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   &__info {
@@ -287,37 +297,39 @@ h1, h2, h3, h4, h5, h6 {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: 1px;
   }
 
   &__name {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #212529;
   }
 
   &__meta {
-    font-size: 0.75rem;
-    color: #6c757d;
+    font-size: 0.72rem;
+    color: #868e96;
   }
 
   &__water {
-    font-size: 0.75rem;
-    color: #198754;
+    font-size: 0.72rem;
+    color: #37b24d;
 
-    &--needs { color: #dc3545; }
+    &--needs { color: #e03131; }
 
-    small { color: #6c757d; }
+    small { color: #868e96; }
   }
 
   &__actions {
     flex-shrink: 0;
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    gap: 4px;
 
     .btn {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
+      font-size: 0.68rem;
+      padding: 0.2rem 0.45rem;
       white-space: nowrap;
+      border-radius: 3px;
     }
   }
 }

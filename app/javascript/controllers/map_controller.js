@@ -240,7 +240,7 @@ export default class extends Controller {
     const card = document.getElementById(`entry-card-${entryId}`)
     const pin  = this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
     const method = on ? "add" : "remove"
-    card?.classList[method]("border-primary", "shadow")
+    card?.classList[method]("entry-row--active")
     pin?.classList[method]("map-pin--highlighted")
   }
 

@@ -55,19 +55,19 @@
           </div>
 
           <div class="entry-row__actions">
-            <button class="btn btn-dark btn-sm"
+            <button class="btn btn-outline-secondary btn-sm"
                     data-action="click->map#startPlacing"
                     data-map-entry-id-param="<%= entry.id %>"
                     id="place-pin-btn-<%= entry.id %>">
-              <%= entry.pin.present? ? "Move/Place" : "Move/Place" %>
+              📍 Pin
             </button>
-            <button class="btn btn-dark btn-sm"
+            <button class="btn btn-outline-secondary btn-sm"
                     data-action="click->map#expandEntry"
                     data-map-entry-id-param="<%= entry.id %>">
-              Modify
+              ✏️ Edit
             </button>
-            <%= button_to "Delete", entry, method: :delete,
-                  class: "btn btn-dark btn-sm",
+            <%= button_to "🗑", entry, method: :delete,
+                  class: "btn btn-outline-danger btn-sm",
                   data: { confirm: "Are you sure?" } %>
           </div>
         </div>
