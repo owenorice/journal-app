@@ -1,12 +1,25 @@
 name: Deploy Rails App to Azure
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches:
       - main
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      terraform: ${{ steps.filter.outputs.terraform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            terraform:
+              - 'terraform/**'
+
   deploy:
     runs-on: ubuntu-latest
     environment: Terraform
@@ -24,6 +37,22 @@ jobs:
           docker build --platform linux/amd64 -t acrjournalapp.azurecr.io/journal_app:latest .
           docker push acrjournalapp.azurecr.io/journal_app:latest
 
+      - name: Restart Web App
+        run: az webapp restart --name $(az webapp list --query "[?contains(name, 'app-journalapp')].name" -o tsv) --resource-group rg-journal-app
+
+  terraform:
+    needs: [changes, deploy]
+    if: needs.changes.outputs.terraform == 'true'
+    runs-on: ubuntu-latest
+    environment: Terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -34,5 +63,3 @@ jobs:
       - name: Terraform Apply
         working-directory: ./terraform
         run: terraform apply -auto-approve -var="rails_master_key=${{ secrets.RAILS_MASTER_KEY }}"
-      - name: Restart Web App
-        run: az webapp restart --name $(az webapp list --query "[?contains(name, 'app-journalapp')].name" -o tsv) --resource-group rg-journal-app
