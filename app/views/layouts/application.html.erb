@@ -13,11 +13,15 @@
  </head>
 
  <body>
-   <% if notice %>
-     <p class="alert alert-info"><%= notice %></p>
-   <% end %>
-   <% if alert %>
-     <p class="alert alert-danger"><%= alert %></p>
+   <% if notice.present? || alert.present? %>
+     <div class="app-toast-container" data-controller="toast">
+       <% if notice.present? %>
+         <div class="app-toast app-toast--info" data-toast-target="message"><%= notice %></div>
+       <% end %>
+       <% if alert.present? %>
+         <div class="app-toast app-toast--danger" data-toast-target="message"><%= alert %></div>
+       <% end %>
+     </div>
    <% end %>
    <%= render '/shared/navbar' %>
    <%= yield %>
