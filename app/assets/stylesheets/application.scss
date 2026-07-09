@@ -184,7 +184,8 @@ h1, h2, h3, h4, h5, h6 {
 // ── Map pins ──
 .map-pin {
   position: absolute;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -100%) scale(var(--pin-scale, 1));
+  transform-origin: center bottom; // scale from the pin tip
   font-size: 1.5rem;
   line-height: 1;
   cursor: default;
@@ -223,7 +224,7 @@ h1, h2, h3, h4, h5, h6 {
 
   &--highlighted {
     filter: drop-shadow(0 0 6px #0d6efd);
-    transform: translate(-50%, -100%) scale(1.3);
+    transform: translate(-50%, -100%) scale(calc(var(--pin-scale, 1) * 1.3));
     transition: transform 0.15s ease, filter 0.15s ease;
     z-index: 20;
 

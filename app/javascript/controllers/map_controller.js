@@ -193,8 +193,11 @@ export default class extends Controller {
   }
 
   #applyTransform() {
-    this.canvasTarget.style.transform =
+    const c = this.canvasTarget
+    c.style.transform =
       `translate(${this.#panX}px, ${this.#panY}px) scale(${this.#scale})`
+    // Counter-scale for pins so they stay constant visual size
+    c.style.setProperty("--pin-scale", 1 / this.#scale)
   }
 
   #fitToView() {
