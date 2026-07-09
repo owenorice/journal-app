@@ -1,7 +1,7 @@
-name: Deploy Rails App to Azure
+name: Deploy
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -10,6 +10,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: Terraform
+    concurrency:
+      group: infrastructure
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
 
@@ -24,15 +27,5 @@ jobs:
           docker build --platform linux/amd64 -t acrjournalapp.azurecr.io/journal_app:latest .
           docker push acrjournalapp.azurecr.io/journal_app:latest
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Init
-        working-directory: ./terraform
-        run: terraform init
-
-      - name: Terraform Apply
-        working-directory: ./terraform
-        run: terraform apply -auto-approve -var="rails_master_key=${{ secrets.RAILS_MASTER_KEY }}"
       - name: Restart Web App
         run: az webapp restart --name $(az webapp list --query "[?contains(name, 'app-journalapp')].name" -o tsv) --resource-group rg-journal-app
