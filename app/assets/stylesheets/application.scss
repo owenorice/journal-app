@@ -50,7 +50,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 
   &__map {
-    flex: 1 1 50%;
+    flex: 0 0 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,7 +59,6 @@ h1, h2, h3, h4, h5, h6 {
     border-right: 1px solid #dee2e6;
     background: #f8f9fa;
   }
-
   &__entries {
     flex: 1 1 50%;
     overflow-y: auto;
@@ -76,6 +75,7 @@ h1, h2, h3, h4, h5, h6 {
     &__map {
       border-right: none;
       border-bottom: 1px solid #dee2e6;
+      min-height: 300px;
       max-height: 50vh;
     }
 
@@ -86,37 +86,93 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// ── Map container ──
-.map-container {
+// ── Map viewport (clipping box) ──
+.map-viewport {
   position: relative;
-  display: block;
-  cursor: default;
-  user-select: none;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 100%;
+  overflow: hidden;
+  border: 2px solid #adb5bd;
+  border-radius: 6px;
+  background: #e9ecef;
+  cursor: grab;
+  touch-action: none;
+
+  &:active { cursor: grabbing; }
+
+  &--placing {
+    cursor: crosshair !important;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+  }
+}
+
+.map-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
 
   &__image {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
     pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+// ── Overlay controls ──
+.map-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  &__btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+
+    &:hover {
+      background: #f0f0f0;
+    }
+    &:active {
+      background: #ddd;
+    }
   }
 }
 
 .map-hint {
   position: absolute;
-  top: 0.5rem;
+  bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.75);
   color: #fff;
-  font-size: 0.8rem;
-  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 4px;
   white-space: nowrap;
   margin: 0;
+  pointer-events: none;
 
   kbd {
     background: rgba(255,255,255,0.2);
@@ -194,8 +250,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .map-placing-mode {
   cursor: crosshair !important;
-  outline: 3px solid #0d6efd;
-  outline-offset: -3px;
 }
 
 // ── Entry rows (right column) ──

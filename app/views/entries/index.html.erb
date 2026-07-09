@@ -2,24 +2,34 @@
      data-map-create-url-value="<%= pins_path %>"
      class="map-layout">
 
-  <%# ── Left column: floor plan map ── %>
+  <%# ── Left column: pan/zoom map viewport ── %>
   <div class="map-layout__map">
     <div id="map-container"
-         class="map-container"
-         data-map-target="container">
+         class="map-viewport"
+         data-map-target="viewport">
+
+      <%# Transformable canvas — image + pins move together %>
+      <div class="map-canvas" data-map-target="canvas">
+        <%= image_tag "map_background.png",
+              class: "map-canvas__image",
+              draggable: false,
+              alt: "Floor plan map" %>
+
+        <div id="pins-container">
+          <%= render @pins %>
+        </div>
+      </div>
+
+      <%# Overlay controls %>
+      <div class="map-controls">
+        <button type="button" class="map-controls__btn" data-action="click->map#zoomIn" title="Zoom in">+</button>
+        <button type="button" class="map-controls__btn" data-action="click->map#zoomOut" title="Zoom out">−</button>
+        <button type="button" class="map-controls__btn" data-action="click->map#resetView" title="Reset view">⟲</button>
+      </div>
 
       <p id="map-hint" class="map-hint" style="display:none;">
-        Click on the map to place the pin. Press <kbd>Esc</kbd> to cancel.
+        Click to place pin · <kbd>Esc</kbd> cancel
       </p>
-
-      <%= image_tag "map_background.png",
-            class: "map-container__image",
-            draggable: false,
-            alt: "Floor plan map" %>
-
-      <div id="pins-container">
-        <%= render @pins %>
-      </div>
     </div>
   </div>
 
