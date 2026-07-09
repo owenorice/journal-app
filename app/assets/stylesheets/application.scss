@@ -260,47 +260,112 @@ h1, h2, h3, h4, h5, h6 {
 // ── Entry rows (right column) ──
 .entry-row {
   display: flex;
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
   border-bottom: 1px solid #dee2e6;
   transition: background 0.15s ease;
+  align-items: center;
 
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &:hover {
-    background: #f0f4ff;
-  }
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f0f4ff; }
 
   &__thumb {
     flex-shrink: 0;
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     border: 1px solid #dee2e6;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.75rem;
     background: #fff;
+    border-radius: 4px;
   }
 
-  &__details {
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  &__name {
+    font-size: 0.95rem;
+  }
+
+  &__meta {
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+
+  &__water {
+    font-size: 0.75rem;
+    color: #198754;
+
+    &--needs { color: #dc3545; }
+
+    small { color: #6c757d; }
+  }
+
+  &__actions {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .btn {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+    }
+  }
+}
+
+// ── Expanded entry panel ──
+.entry-expand {
+  height: 100%;
+  overflow-y: auto;
+
+  &__panel {
+    padding: 0.5rem 0;
+  }
+
+  &__header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__thumb {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: #fff;
+    border-radius: 6px;
+  }
+
+  &__fields {
     flex: 1;
     min-width: 0;
   }
 
-  &__list {
-    list-style: disc;
-    padding-left: 1.2rem;
-    margin: 0;
+  &__notes {
+    margin-bottom: 1rem;
+  }
 
-    li {
-      margin-bottom: 0.15rem;
-    }
+  &__notes-area {
+    font-size: 0.85rem;
+    resize: vertical;
+  }
 
-    a {
-      word-break: break-all;
-    }
+  &__footer {
+    display: flex;
+    gap: 0.5rem;
   }
 }

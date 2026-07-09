@@ -5,7 +5,7 @@ const MAX_SCALE = 5
 const ZOOM_STEP = 0.25
 
 export default class extends Controller {
-  static targets = ["viewport", "canvas", "pins"]
+  static targets = ["viewport", "canvas", "pins", "entryList", "entryExpand"]
   static values  = { createUrl: String }
 
   // -- Transform state --
@@ -27,6 +27,9 @@ export default class extends Controller {
 
   // -- Pin placement --
   #placingEntryId = null
+
+  // -- Expand panel --
+  #expandedEntryId = null
 
   // -- MutationObserver for new pins --
   #pinObserver = null
@@ -85,6 +88,32 @@ export default class extends Controller {
 
   unhighlight({ params: { entryId } }) {
     this.#setHighlight(entryId, false)
+  }
+
+  expandEntry({ params: { entryId } }) {
+    // Hide the list, show the expand container
+    this.entryListTarget.style.display = "none"
+    this.entryExpandTarget.style.display = ""
+
+    // Hide all panels, show the one for this entry
+    for (const panel of this.entryExpandTarget.querySelectorAll(".entry-expand__panel")) {
+      panel.style.display = "none"
+    }
+    const panel = document.getElementById(`entry-panel-${entryId}`)
+    if (panel) panel.style.display = ""
+
+    // Highlight the entry's pin on the map
+    this.#setHighlight(entryId, true)
+    this.#expandedEntryId = entryId
+  }
+
+  collapseEntry() {
+    this.entryListTarget.style.display = ""
+    this.entryExpandTarget.style.display = "none"
+    if (this.#expandedEntryId) {
+      this.#setHighlight(this.#expandedEntryId, false)
+      this.#expandedEntryId = null
+    }
   }
 
   // ── Drag-to-pan ──
