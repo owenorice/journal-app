@@ -189,7 +189,7 @@ export default class extends Controller {
     .then(html => {
       if (html) Turbo.renderStreamMessage(html)
       const btn = document.getElementById(`place-pin-btn-${entryId}`)
-      if (btn) btn.textContent = "🗺️ Move Pin"
+      if (btn) btn.textContent = "📍 Move Pin"
     })
   }
 
