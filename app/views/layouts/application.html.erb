@@ -14,12 +14,12 @@
 
  <body>
    <% if notice.present? || alert.present? %>
-     <div class="toast-container" data-controller="toast">
+     <div class="app-toast-container" data-controller="toast">
        <% if notice.present? %>
-         <div class="toast toast--info" data-toast-target="message"><%= notice %></div>
+         <div class="app-toast app-toast--info" data-toast-target="message"><%= notice %></div>
        <% end %>
        <% if alert.present? %>
-         <div class="toast toast--danger" data-toast-target="message"><%= alert %></div>
+         <div class="app-toast app-toast--danger" data-toast-target="message"><%= alert %></div>
        <% end %>
      </div>
    <% end %>

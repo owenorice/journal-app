@@ -5,7 +5,7 @@
     <% if entry.icon_image.attached? %>
       <%= image_tag entry.icon_image, class: "icon-picker__img" %>
     <% else %>
-      <span class="icon-picker__emoji" data-icon-picker-target="emojiDisplay"><%= entry.display_icon %></span>
+      <span class="icon-picker__emoji"><%= entry.display_icon %></span>
     <% end %>
   </div>
 
@@ -29,15 +29,16 @@
               class: "d-none",
               data: { action: "change->icon-picker#uploadImage", icon_picker_target: "fileInput" } %>
       </label>
-      <% if entry.icon_image.attached? %>
-        <button type="button"
-                class="btn btn-outline-danger btn-sm"
-                data-action="click->icon-picker#removeImage">
-          Remove image
-        </button>
-      <% end %>
+      <button type="button"
+              class="btn btn-outline-danger btn-sm"
+              data-action="click->icon-picker#removeImage"
+              data-icon-picker-target="removeBtn"
+              style="<%= 'display:none' unless entry.icon_image.attached? %>">
+        Remove image
+      </button>
     </div>
   </div>
 
   <%= form.hidden_field :icon, value: entry.display_icon, data: { icon_picker_target: "iconField" } %>
+  <input type="hidden" name="purge_icon_image" value="0" data-icon-picker-target="purgeField">
 </div>
