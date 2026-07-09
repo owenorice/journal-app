@@ -16,6 +16,11 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
   color: #333;
+  margin: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .navbar {
@@ -46,7 +51,8 @@ h1, h2, h3, h4, h5, h6 {
 // ── Two-column map layout ──
 .map-layout {
   display: flex;
-  height: calc(100vh - 36px); // full height below sticky navbar
+  flex: 1;
+  min-height: 0; // allow flex children to shrink
   overflow: hidden;
 
   &__map {

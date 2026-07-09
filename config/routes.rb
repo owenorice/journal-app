@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   root 'entries#index'
-  resources :entries, only: [:create, :new, :destroy, :update]
+  resources :entries, only: [:create, :new, :destroy, :update] do
+    member do
+      post :water
+    end
+  end
   resources :pins, only: [:create, :destroy]
   
 end

@@ -1,6 +1,6 @@
 class EntriesController < ApplicationController
   def index
-    @entries = Entry.all
+    @entries = Entry.by_watering_urgency
     @pins    = Pin.all
   end
 
@@ -25,6 +25,12 @@ class EntriesController < ApplicationController
     else
       redirect_to root_url, alert: "Could not update entry."
     end
+  end
+
+  def water
+    @entry = Entry.find(params[:id])
+    @entry.water!
+    redirect_to root_url, notice: "#{@entry.name} watered! 💧"
   end
 
   def destroy

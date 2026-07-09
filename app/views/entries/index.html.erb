@@ -55,12 +55,17 @@
             <% if entry.watering_frequency.present? %>
               <span class="entry-row__water <%= 'entry-row__water--needs' if entry.needs_watering? %>">
                 <%= entry.needs_watering? ? "💧 Needs watering" : "✅ Watered" %>
-                <small>· every <%= pluralize(entry.watering_frequency, 'day') %></small>
+                <small>· <%= time_ago_in_words(entry.last_watered_at || entry.created_at) %> ago · every <%= pluralize(entry.watering_frequency, 'day') %></small>
               </span>
             <% end %>
           </div>
 
           <div class="entry-row__actions">
+            <% if entry.watering_frequency.present? %>
+              <%= button_to "💧", water_entry_path(entry),
+                    class: "btn btn-sm #{entry.needs_watering? ? 'btn-warning' : 'btn-outline-secondary'}",
+                    title: "Mark as watered" %>
+            <% end %>
             <button class="btn btn-outline-secondary btn-sm"
                     data-action="click->map#startPlacing"
                     data-map-entry-id-param="<%= entry.id %>"
@@ -123,6 +128,12 @@
 
             <div class="entry-expand__footer">
               <%= f.submit "Save", class: "btn btn-primary" %>
+              <button type="button" class="btn btn-outline-secondary btn-sm"
+                      data-action="click->map#startPlacing"
+                      data-map-entry-id-param="<%= entry.id %>"
+                      id="expand-pin-btn-<%= entry.id %>">
+                <%= entry.pin.present? ? "📍 Move Pin" : "📍 Place Pin" %>
+              </button>
               <button type="button" class="btn btn-outline-secondary"
                       data-action="click->map#collapseEntry">
                 ← Back
