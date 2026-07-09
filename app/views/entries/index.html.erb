@@ -9,7 +9,7 @@
          data-map-target="viewport">
 
       <div class="map-canvas" data-map-target="canvas">
-        <%= image_tag "map_background.png",
+        <%= image_tag "example1.png",
               class: "map-canvas__image",
               draggable: false,
               alt: "Floor plan map" %>
@@ -65,7 +65,7 @@
                     data-action="click->map#startPlacing"
                     data-map-entry-id-param="<%= entry.id %>"
                     id="place-pin-btn-<%= entry.id %>">
-              📍 Pin
+              <%= entry.pin.present? ? "📍 Move Pin" : "📍 Pin" %>
             </button>
             <button class="btn btn-outline-secondary btn-sm"
                     data-action="click->map#expandEntry"
