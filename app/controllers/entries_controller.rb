@@ -34,6 +34,6 @@ class EntriesController < ApplicationController
   private
 
   def entry_params
-    params.require(:entry).permit(:name, :link, :watering_frequency, :notes)
+    params.require(:entry).permit(:name, :link, :watering_frequency, :notes, :icon, :icon_image)
   end
 end
