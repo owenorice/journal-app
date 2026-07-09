@@ -8,18 +8,18 @@
          class="map-viewport"
          data-map-target="viewport">
 
-      <%# Transformable canvas — image + pins move together %>
+      <%# Transformable canvas — image only %>
       <div class="map-canvas" data-map-target="canvas">
         <%= image_tag "map_background.png",
               class: "map-canvas__image",
               draggable: false,
               alt: "Floor plan map" %>
-
-        <div id="pins-container">
-          <%= render @pins %>
-        </div>
       </div>
 
+      <%# Pin overlay — outside canvas transform, always crisp %>
+      <div id="pins-container" data-map-target="pins">
+        <%= render @pins %>
+      </div>
       <%# Overlay controls %>
       <div class="map-controls">
         <button type="button" class="map-controls__btn" data-action="click->map#zoomIn" title="Zoom in">+</button>

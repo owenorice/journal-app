@@ -181,12 +181,11 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// ── Map pins ──
+// ── Map pins (positioned in viewport space, always crisp) ──
 .map-pin {
   position: absolute;
-  transform: translate(-50%, -100%) scale(var(--pin-scale, 1));
-  transform-origin: center bottom; // scale from the pin tip
-  font-size: 1.5rem;
+  transform: translate(-50%, -100%);
+  font-size: 2rem;
   line-height: 1;
   cursor: default;
   z-index: 10;
@@ -194,13 +193,22 @@ h1, h2, h3, h4, h5, h6 {
   &__delete {
     display: none;
     position: absolute;
-    top: -0.25rem;
-    right: -0.75rem;
-    font-size: 0.5rem;
+    top: -0.4rem;
+    right: -0.9rem;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 1;
   }
 
   &:hover &__delete {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__label {
@@ -209,12 +217,12 @@ h1, h2, h3, h4, h5, h6 {
     bottom: 110%;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.8);
     color: #fff;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     white-space: nowrap;
-    padding: 2px 6px;
-    border-radius: 3px;
+    padding: 3px 8px;
+    border-radius: 4px;
     pointer-events: none;
   }
 
@@ -224,7 +232,7 @@ h1, h2, h3, h4, h5, h6 {
 
   &--highlighted {
     filter: drop-shadow(0 0 6px #0d6efd);
-    transform: translate(-50%, -100%) scale(calc(var(--pin-scale, 1) * 1.3));
+    transform: translate(-50%, -100%) scale(1.2);
     transition: transform 0.15s ease, filter 0.15s ease;
     z-index: 20;
 
@@ -234,14 +242,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-@keyframes pin-pulse {
-  0%   { transform: translate(-50%, -120%) scale(1.4); }
-  100% { transform: translate(-50%, -100%) scale(1); }
-}
-
 #pins-container {
   position: absolute;
   inset: 0;
+  overflow: visible;
   pointer-events: none;
 
   .map-pin {

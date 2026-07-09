@@ -5,12 +5,12 @@ const MAX_SCALE = 5
 const ZOOM_STEP = 0.25
 
 export default class extends Controller {
-  static targets = ["viewport", "canvas"]
+  static targets = ["viewport", "canvas", "pins"]
   static values  = { createUrl: String }
 
   // -- Transform state --
   #scale = 1
-  #panX  = 0  // px offset of canvas origin
+  #panX  = 0
   #panY  = 0
 
   // -- Drag state --
@@ -21,8 +21,15 @@ export default class extends Controller {
   #panStartX  = 0
   #panStartY  = 0
 
+  // -- Image natural dimensions (cached) --
+  #natW = 0
+  #natH = 0
+
   // -- Pin placement --
   #placingEntryId = null
+
+  // -- MutationObserver for new pins --
+  #pinObserver = null
 
   connect() {
     const vp = this.viewportTarget
@@ -33,6 +40,10 @@ export default class extends Controller {
     vp.addEventListener("wheel",       this.#onWheel, { passive: false })
     vp.addEventListener("click",       this.#handleMapClick)
     document.addEventListener("keydown", this.#handleKeydown)
+
+    // Watch for Turbo Stream pin additions/removals
+    this.#pinObserver = new MutationObserver(() => this.#repositionPins())
+    this.#pinObserver.observe(this.pinsTarget, { childList: true, subtree: true })
 
     // Fit image into viewport once loaded
     const img = this.canvasTarget.querySelector(".map-canvas__image")
@@ -52,6 +63,7 @@ export default class extends Controller {
     vp.removeEventListener("wheel",       this.#onWheel)
     vp.removeEventListener("click",       this.#handleMapClick)
     document.removeEventListener("keydown", this.#handleKeydown)
+    this.#pinObserver?.disconnect()
     this.#exitPlacingMode()
   }
 
@@ -78,12 +90,12 @@ export default class extends Controller {
   }
 
   highlightPin({ params: { entryId } }) {
-    this.canvasTarget.querySelector(`[data-entry-id="${entryId}"]`)
+    this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
       ?.classList.add("map-pin--highlighted")
   }
 
   unhighlightPin({ params: { entryId } }) {
-    this.canvasTarget.querySelector(`[data-entry-id="${entryId}"]`)
+    this.pinsTarget.querySelector(`[data-entry-id="${entryId}"]`)
       ?.classList.remove("map-pin--highlighted")
   }
 
@@ -130,18 +142,16 @@ export default class extends Controller {
 
   #handleMapClick = (e) => {
     if (e.target.closest(".map-pin") || e.target.closest(".map-controls")) return
-    if (this.#wasDragged) return           // was a drag, not a click
-    if (!this.#placingEntryId) return       // not in placement mode
+    if (this.#wasDragged) return
+    if (!this.#placingEntryId) return
 
-    // Convert viewport click → canvas-relative percentages
-    const vpRect     = this.viewportTarget.getBoundingClientRect()
-    const canvasRect = this.canvasTarget.getBoundingClientRect()
-    const xOnCanvas  = e.clientX - canvasRect.left
-    const yOnCanvas  = e.clientY - canvasRect.top
-    const xPct       = (xOnCanvas / canvasRect.width)  * 100
-    const yPct       = (yOnCanvas / canvasRect.height) * 100
+    // Convert viewport click → image-percentage coordinates
+    const vpRect = this.viewportTarget.getBoundingClientRect()
+    const clickVpX = e.clientX - vpRect.left
+    const clickVpY = e.clientY - vpRect.top
+    const xPct = ((clickVpX - this.#panX) / (this.#natW * this.#scale)) * 100
+    const yPct = ((clickVpY - this.#panY) / (this.#natH * this.#scale)) * 100
 
-    // Clamp to image bounds
     if (xPct < 0 || xPct > 100 || yPct < 0 || yPct > 100) return
 
     const entryId = this.#placingEntryId
@@ -173,7 +183,6 @@ export default class extends Controller {
   // ── Helpers ──
 
   #zoomBy(delta) {
-    // Zoom toward viewport centre
     const r = this.viewportTarget.getBoundingClientRect()
     this.#zoomAt(delta, r.left + r.width / 2, r.top + r.height / 2)
   }
@@ -183,9 +192,8 @@ export default class extends Controller {
     this.#scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, prev + delta))
     const ratio = this.#scale / prev
 
-    // Keep the point under the cursor stationary
     const vpRect = this.viewportTarget.getBoundingClientRect()
-    const cx = clientX - vpRect.left  // cursor relative to viewport
+    const cx = clientX - vpRect.left
     const cy = clientY - vpRect.top
     this.#panX = cx - ratio * (cx - this.#panX)
     this.#panY = cy - ratio * (cy - this.#panY)
@@ -193,11 +201,22 @@ export default class extends Controller {
   }
 
   #applyTransform() {
-    const c = this.canvasTarget
-    c.style.transform =
+    this.canvasTarget.style.transform =
       `translate(${this.#panX}px, ${this.#panY}px) scale(${this.#scale})`
-    // Counter-scale for pins so they stay constant visual size
-    c.style.setProperty("--pin-scale", 1 / this.#scale)
+    this.#repositionPins()
+  }
+
+  // Position each pin in viewport space — never inside the canvas transform,
+  // so pins are always rasterized at native screen resolution.
+  #repositionPins() {
+    const pins = this.pinsTarget.querySelectorAll(".map-pin")
+    for (const pin of pins) {
+      const xPct = parseFloat(pin.dataset.xPct)
+      const yPct = parseFloat(pin.dataset.yPct)
+      if (isNaN(xPct) || isNaN(yPct)) continue
+      pin.style.left = `${this.#panX + (xPct / 100) * this.#natW * this.#scale}px`
+      pin.style.top  = `${this.#panY + (yPct / 100) * this.#natH * this.#scale}px`
+    }
   }
 
   #fitToView() {
@@ -205,18 +224,18 @@ export default class extends Controller {
     const img = this.canvasTarget.querySelector(".map-canvas__image")
     if (!img || !img.naturalWidth) return
 
-    // Size the canvas to the image's natural pixel dimensions
-    // so percentage-based pins remain accurate
-    this.canvasTarget.style.width  = `${img.naturalWidth}px`
-    this.canvasTarget.style.height = `${img.naturalHeight}px`
+    this.#natW = img.naturalWidth
+    this.#natH = img.naturalHeight
 
-    const scaleX = vp.clientWidth  / img.naturalWidth
-    const scaleY = vp.clientHeight / img.naturalHeight
+    this.canvasTarget.style.width  = `${this.#natW}px`
+    this.canvasTarget.style.height = `${this.#natH}px`
+
+    const scaleX = vp.clientWidth  / this.#natW
+    const scaleY = vp.clientHeight / this.#natH
     this.#scale  = Math.min(scaleX, scaleY)
 
-    // Centre the scaled image in the viewport
-    const scaledW = img.naturalWidth  * this.#scale
-    const scaledH = img.naturalHeight * this.#scale
+    const scaledW = this.#natW * this.#scale
+    const scaledH = this.#natH * this.#scale
     this.#panX = (vp.clientWidth  - scaledW) / 2
     this.#panY = (vp.clientHeight - scaledH) / 2
     this.#applyTransform()

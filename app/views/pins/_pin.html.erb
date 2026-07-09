@@ -1,6 +1,7 @@
 <div id="pin-<%= pin.id %>"
      class="map-pin"
-     style="left: <%= pin.x_percent %>%; top: <%= pin.y_percent %>%;"
+     data-x-pct="<%= pin.x_percent %>"
+     data-y-pct="<%= pin.y_percent %>"
      data-entry-id="<%= pin.entry_id %>"
      data-action="mouseenter->map#highlightEntry mouseleave->map#unhighlightEntry">
   📍
