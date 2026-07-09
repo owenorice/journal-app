@@ -190,6 +190,16 @@ h1, h2, h3, h4, h5, h6 {
   cursor: default;
   z-index: 10;
 
+  &__icon-img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    display: block;
+  }
+
   &__delete {
     display: none;
     position: absolute;
@@ -463,4 +473,47 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
+}
+
+// ── Toast notifications ──
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+
+  &--visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  &--hiding {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+.toast {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-width: 320px;
+
+  &--info {
+    background: #198754;
+  }
+
+  &--danger {
+    background: #dc3545;
+  }
 }
