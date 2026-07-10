@@ -5,7 +5,7 @@ const MAX_SCALE = 5
 const ZOOM_STEP = 0.25
 
 export default class extends Controller {
-  static targets = ["viewport", "canvas", "pins", "entryList", "entryExpand"]
+  static targets = ["viewport", "canvas", "pins", "entryList", "entryExpand", "entryNew"]
   static values  = { createUrl: String }
 
   // -- Transform state --
@@ -42,6 +42,7 @@ export default class extends Controller {
     vp.addEventListener("pointerleave", this.#onPointerUp)
     vp.addEventListener("wheel",       this.#onWheel, { passive: false })
     vp.addEventListener("click",       this.#handleMapClick)
+    window.addEventListener("app:new-entry", this.#onNewEntry)
     document.addEventListener("keydown", this.#handleKeydown)
 
     // Watch for Turbo Stream pin additions/removals
@@ -66,6 +67,7 @@ export default class extends Controller {
     vp.removeEventListener("wheel",       this.#onWheel)
     vp.removeEventListener("click",       this.#handleMapClick)
     document.removeEventListener("keydown", this.#handleKeydown)
+    window.removeEventListener("app:new-entry", this.#onNewEntry)
     this.#pinObserver?.disconnect()
     this.#exitPlacingMode()
   }
@@ -91,30 +93,42 @@ export default class extends Controller {
   }
 
   expandEntry({ params: { entryId } }) {
-    // Hide the list, show the expand container
     this.entryListTarget.style.display = "none"
     this.entryExpandTarget.style.display = ""
+    this.entryNewTarget.style.display = "none"
 
-    // Hide all panels, show the one for this entry
     for (const panel of this.entryExpandTarget.querySelectorAll(".entry-expand__panel")) {
       panel.style.display = "none"
     }
     const panel = document.getElementById(`entry-panel-${entryId}`)
     if (panel) panel.style.display = ""
 
-    // Highlight the entry's pin on the map
     this.#setHighlight(entryId, true)
     this.#expandedEntryId = entryId
   }
 
-  collapseEntry() {
-    this.entryListTarget.style.display = ""
+  showNewEntry(event) {
+    event?.preventDefault()
+    this.entryListTarget.style.display = "none"
     this.entryExpandTarget.style.display = "none"
+    this.entryNewTarget.style.display = ""
     if (this.#expandedEntryId) {
       this.#setHighlight(this.#expandedEntryId, false)
       this.#expandedEntryId = null
     }
   }
+
+  collapseEntry() {
+    this.entryListTarget.style.display = ""
+    this.entryExpandTarget.style.display = "none"
+    this.entryNewTarget.style.display = "none"
+    if (this.#expandedEntryId) {
+      this.#setHighlight(this.#expandedEntryId, false)
+      this.#expandedEntryId = null
+    }
+  }
+
+  #onNewEntry = () => { this.showNewEntry() }
 
   // ── Drag-to-pan ──
 

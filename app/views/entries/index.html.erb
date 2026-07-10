@@ -21,7 +21,7 @@
 
       <div class="map-controls">
         <button type="button" class="map-controls__btn" data-action="click->map#zoomIn" title="Zoom in">+</button>
-        <button type="button" class="map-controls__btn" data-action="click->map#zoomOut" title="Zoom out">-</button>
+        <button type="button" class="map-controls__btn" data-action="click->map#zoomOut" title="Zoom out">−</button>
         <button type="button" class="map-controls__btn" data-action="click->map#resetView" title="Reset view">⟲</button>
       </div>
 
@@ -31,10 +31,10 @@
     </div>
   </div>
 
-  <%# ── Right column: entry list + expand panel ── %>
+  <%# ── Right column: entry list + expand/new panels ── %>
   <div class="map-layout__entries">
 
-    <%# ── Entry list (hidden when an entry is expanded) ── %>
+    <%# ── Entry list ── %>
     <div id="entry-list" data-map-target="entryList">
       <% @entries.each do |entry| %>
         <div class="entry-row" id="entry-card-<%= entry.id %>"
@@ -85,46 +85,12 @@
       <% end %>
     </div>
 
-    <%# ── Expanded entry panel (hidden by default) ── %>
+    <%# ── Edit entry panels ── %>
     <div id="entry-expand" class="entry-expand" style="display:none;" data-map-target="entryExpand">
       <% @entries.each do |entry| %>
         <div class="entry-expand__panel" id="entry-panel-<%= entry.id %>" style="display:none;">
           <%= form_with(model: entry, class: "entry-expand__form", data: { turbo: false }) do |f| %>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Icon</label>
-              <%= render "entries/icon_picker", form: f, entry: entry %>
-            </div>
-
-            <div class="entry-expand__fields">
-              <label class="form-label fw-bold">Plant Name</label>
-              <%= f.text_field :name, class: "form-control mb-3" %>
-
-              <label class="form-label fw-bold">Watering frequency (days)</label>
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <%= f.range_field :watering_frequency,
-                      min: 1, max: 30,
-                      value: entry.watering_frequency || 7,
-                      class: "form-range flex-grow-1",
-                      oninput: "this.nextElementSibling.textContent = this.value + 'd'" %>
-                <span class="text-muted"><%= entry.watering_frequency || 7 %>d</span>
-              </div>
-
-              <label class="form-label fw-bold">Link</label>
-              <%= f.text_field :link, class: "form-control mb-3", placeholder: "https://..." %>
-            </div>
-
-            <hr>
-
-            <div class="entry-expand__notes">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="fw-bold">Notes</span>
-              </div>
-              <%= f.text_area :notes,
-                    class: "form-control entry-expand__notes-area",
-                    rows: 6,
-                    placeholder: "Add notes about this plant..." %>
-            </div>
+            <%= render "entries/entry_form", f: f, entry: entry %>
 
             <div class="entry-expand__footer">
               <%= f.submit "Save", class: "btn btn-primary" %>
@@ -142,6 +108,23 @@
           <% end %>
         </div>
       <% end %>
+    </div>
+
+    <%# ── New entry panel ── %>
+    <div id="entry-new" class="entry-expand" style="display:none;" data-map-target="entryNew">
+      <div class="entry-expand__panel" style="display:block;">
+        <%= form_with(model: Entry.new, url: entries_path, class: "entry-expand__form", data: { turbo: false }) do |f| %>
+          <%= render "entries/entry_form", f: f, entry: Entry.new %>
+
+          <div class="entry-expand__footer">
+            <%= f.submit "Create Entry", class: "btn btn-primary" %>
+            <button type="button" class="btn btn-outline-secondary"
+                    data-action="click->map#collapseEntry">
+              ← Back
+            </button>
+          </div>
+        <% end %>
+      </div>
     </div>
 
   </div>
