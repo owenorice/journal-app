@@ -16,21 +16,79 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
   color: #333;
+  margin: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.navbar {
-  font-size: 0.85rem;
+.app-navbar {
+  background: #1a1a2e;
+  padding: 0;
+  z-index: 1000;
 
-  .navbar-brand {
-    font-size: 0.95rem;
-    padding-top: 0.15rem;
-    padding-bottom: 0.15rem;
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1.25rem;
   }
 
-  .nav-link {
-    font-size: 0.8rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: #fff;
+
+    &:hover { color: #e0e0e0; }
+  }
+
+  &__logo {
+    font-size: 1.15rem;
+  }
+
+  &__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__btn {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &--primary {
+      background: #4a90d9;
+      color: #fff;
+
+      &:hover { background: #3a7bc8; color: #fff; }
+    }
+
+    &--ghost {
+      background: transparent;
+      color: #adb5bd;
+      border: 1px solid #333;
+
+      &:hover { color: #fff; border-color: #555; }
+    }
   }
 }
 
@@ -46,7 +104,8 @@ h1, h2, h3, h4, h5, h6 {
 // ── Two-column map layout ──
 .map-layout {
   display: flex;
-  height: calc(100vh - 36px); // full height below compact navbar
+  flex: 1;
+  min-height: 0; // allow flex children to shrink
   overflow: hidden;
 
   &__map {
@@ -54,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 0.5rem;
     overflow: hidden;
     border-right: 1px solid #dee2e6;
     background: #f8f9fa;
@@ -62,25 +121,32 @@ h1, h2, h3, h4, h5, h6 {
   &__entries {
     flex: 1 1 50%;
     overflow-y: auto;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
   }
 }
 
-// On narrow screens, stack vertically
+// On narrow screens, stack vertically and allow scrolling
 @media (max-width: 767.98px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+
   .map-layout {
     flex-direction: column;
     height: auto;
+    overflow: visible;
 
     &__map {
+      flex: none;
       border-right: none;
       border-bottom: 1px solid #dee2e6;
-      min-height: 300px;
-      max-height: 50vh;
+      height: 50vh;
+      min-height: 250px;
     }
 
     &__entries {
-      max-height: none;
+      flex: none;
       overflow-y: visible;
     }
   }
@@ -90,8 +156,7 @@ h1, h2, h3, h4, h5, h6 {
 .map-viewport {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  max-height: 100%;
+  height: 100%;
   overflow: hidden;
   border: 2px solid #adb5bd;
   border-radius: 6px;
@@ -266,6 +331,7 @@ h1, h2, h3, h4, h5, h6 {
 .map-placing-mode {
   cursor: crosshair !important;
 }
+
 
 // ── Entry rows (right column) ──
 .entry-row {

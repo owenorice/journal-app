@@ -1,7 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# NOTE: the "tables" table has no corresponding model, so fixture loading
+# cannot auto-fill its NOT NULL timestamps; they must be explicit.
 one:
   name: MyString
+  created_at: <%= Time.current.to_fs(:db) %>
+  updated_at: <%= Time.current.to_fs(:db) %>
 
 two:
   name: MyString
+  created_at: <%= Time.current.to_fs(:db) %>
+  updated_at: <%= Time.current.to_fs(:db) %>
