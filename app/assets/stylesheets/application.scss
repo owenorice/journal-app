@@ -125,21 +125,28 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// On narrow screens, stack vertically
+// On narrow screens, stack vertically and allow scrolling
 @media (max-width: 767.98px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+
   .map-layout {
     flex-direction: column;
     height: auto;
+    overflow: visible;
 
     &__map {
+      flex: none;
       border-right: none;
       border-bottom: 1px solid #dee2e6;
-      min-height: 300px;
-      max-height: 50vh;
+      height: 50vh;
+      min-height: 250px;
     }
 
     &__entries {
-      max-height: none;
+      flex: none;
       overflow-y: visible;
     }
   }
