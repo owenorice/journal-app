@@ -45,7 +45,7 @@ resource "azurerm_linux_web_app" "app" {
   }
 
   site_config {
-    always_on                            = false
+    always_on                            = true
     container_registry_use_managed_identity = true
 
     application_stack {
@@ -65,12 +65,39 @@ resource "azurerm_linux_web_app" "app" {
     "QUEUE_DATABASE_URL"            = "postgres://pgadmin:npxfZM%23_mK3JNEtQZbdx@${azurerm_postgresql_flexible_server.postgres.fqdn}:5432/journal_app_production_queue?sslmode=require"
     "CABLE_DATABASE_URL"            = "postgres://pgadmin:npxfZM%23_mK3JNEtQZbdx@${azurerm_postgresql_flexible_server.postgres.fqdn}:5432/journal_app_production_cable?sslmode=require"
     "JOURNAL_APP_DATABASE_PASSWORD" = random_password.postgres_password.result
+    "AZURE_STORAGE_ACCOUNT_NAME"    = azurerm_storage_account.uploads.name
+    "AZURE_STORAGE_CONTAINER"       = azurerm_storage_container.uploads.name
+    "SOLID_QUEUE_IN_PUMA"           = "true"
   }
 }
 
 resource "azurerm_role_assignment" "acr_pull" {
   scope                = azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
+  principal_id         = azurerm_linux_web_app.app.identity[0].principal_id
+}
+
+// --- Blob storage for Active Storage uploads ---
+resource "azurerm_storage_account" "uploads" {
+  name                            = "stjournalapp${random_id.postgres_suffix.hex}"
+  resource_group_name             = data.azurerm_resource_group.main.name
+  location                        = data.azurerm_resource_group.main.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  access_tier                     = "Hot"
+  min_tls_version                 = "TLS1_2"
+  allow_nested_items_to_be_public = false
+}
+
+resource "azurerm_storage_container" "uploads" {
+  name                  = "activestorage"
+  storage_account_id    = azurerm_storage_account.uploads.id
+  container_access_type = "private"
+}
+
+resource "azurerm_role_assignment" "app_blob_contributor" {
+  scope                = azurerm_storage_account.uploads.id
+  role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_linux_web_app.app.identity[0].principal_id
 }
 
