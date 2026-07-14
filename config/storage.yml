@@ -6,10 +6,10 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-# Auth via the App Service system-assigned managed identity (no principal_id needed);
-# token fetch is lazy, so boot/precompile without Azure network access still works.
+# Shared-key auth (the deploy pipeline's service principal cannot create role
+# assignments for managed identity; see the NOTE in terraform/main.tf).
 azure:
   service: AzureBlob
   storage_account_name: <%= ENV["AZURE_STORAGE_ACCOUNT_NAME"] %>
   container: <%= ENV["AZURE_STORAGE_CONTAINER"] %>
-  use_managed_identities: true
+  storage_access_key: <%= ENV["AZURE_STORAGE_ACCESS_KEY"] %>
