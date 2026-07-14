@@ -67,6 +67,7 @@ resource "azurerm_linux_web_app" "app" {
     "JOURNAL_APP_DATABASE_PASSWORD" = random_password.postgres_password.result
     "AZURE_STORAGE_ACCOUNT_NAME"    = azurerm_storage_account.uploads.name
     "AZURE_STORAGE_CONTAINER"       = azurerm_storage_container.uploads.name
+    "AZURE_STORAGE_ACCESS_KEY"      = azurerm_storage_account.uploads.primary_access_key
     "SOLID_QUEUE_IN_PUMA"           = "true"
   }
 }
@@ -95,12 +96,11 @@ resource "azurerm_storage_container" "uploads" {
   container_access_type = "private"
 }
 
-resource "azurerm_role_assignment" "app_blob_contributor" {
-  scope                = azurerm_storage_account.uploads.id
-  role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azurerm_linux_web_app.app.identity[0].principal_id
-}
-
+// NOTE: shared-key auth instead of a managed-identity role assignment: the
+// pipeline's service principal lacks Microsoft.Authorization/roleAssignments/write.
+// To go secretless later, grant the app's identity "Storage Blob Data Contributor"
+// on this account and swap the AZURE_STORAGE_ACCESS_KEY app setting for
+// use_managed_identities in config/storage.yml.
 
 output "app_service_url" {
   value       = "https://${azurerm_linux_web_app.app.default_hostname}"
