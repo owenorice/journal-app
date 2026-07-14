@@ -34,6 +34,31 @@ class Entry < ApplicationRecord
     watered + watering_frequency.days <= Time.current
   end
 
+  # How desperately the plant needs water, as a fraction of its watering
+  # interval elapsed past the due date: 0.0 at due, 1.0 once a full extra
+  # interval has passed. nil when unscheduled, negative when not yet due.
+  def watering_overdue_ratio
+    return nil unless watering_frequency.present?
+
+    interval = watering_frequency.days
+    watered = last_watered_at || created_at
+    (Time.current - (watered + interval)) / interval
+  end
+
+  # nil when watering is not (yet) needed, otherwise :due -> :thirsty -> :parched.
+  def watering_urgency
+    ratio = watering_overdue_ratio
+    return nil if ratio.nil? || ratio.negative?
+
+    if ratio >= 1.0
+      :parched
+    elsif ratio >= 0.5
+      :thirsty
+    else
+      :due
+    end
+  end
+
   def next_watering_at
     return nil unless watering_frequency.present?
 

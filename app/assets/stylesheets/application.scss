@@ -315,6 +315,33 @@ h1, h2, h3, h4, h5, h6 {
       display: block;
     }
   }
+
+  // ── Watering urgency: ring gets hotter the longer watering is overdue ──
+  $water-levels: (
+    due: #f4b400,
+    thirsty: #f76707,
+    parched: #e03131,
+  );
+
+  @each $level, $color in $water-levels {
+    &--water-#{$level} {
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px $color, 0 0 10px 2px rgba($color, 0.55);
+
+      .map-pin__icon-img {
+        border-color: $color;
+      }
+    }
+  }
+
+  &--water-parched {
+    animation: map-pin-parched-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes map-pin-parched-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px #e03131, 0 0 10px 2px rgba(#e03131, 0.55); }
+  50%      { box-shadow: 0 0 0 5px #e03131, 0 0 18px 6px rgba(#e03131, 0.35); }
 }
 
 #pins-container {
