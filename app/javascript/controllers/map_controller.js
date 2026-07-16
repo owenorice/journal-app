@@ -49,10 +49,12 @@ export default class extends Controller {
     this.#pinObserver = new MutationObserver(() => this.#repositionPins())
     this.#pinObserver.observe(this.pinsTarget, { childList: true, subtree: true })
 
-    // Fit image into viewport once loaded
+    // Fit image into viewport once loaded. Canvas and pins stay invisible
+    // (CSS, keyed off map-viewport--ready) until the first fit is applied,
+    // so the unfitted natural-size image never paints.
     const img = this.canvasTarget.querySelector(".map-canvas__image")
     if (img.complete) {
-      requestAnimationFrame(() => this.#fitToView())
+      this.#fitToView()
     } else {
       img.addEventListener("load", () => this.#fitToView(), { once: true })
     }
@@ -278,6 +280,7 @@ export default class extends Controller {
     this.#panX = (vp.clientWidth  - scaledW) / 2
     this.#panY = (vp.clientHeight - scaledH) / 2
     this.#applyTransform()
+    this.viewportTarget.classList.add("map-viewport--ready")
   }
 
   #exitPlacingMode() {

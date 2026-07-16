@@ -41,13 +41,17 @@
              data-action="mouseenter->map#highlight mouseleave->map#unhighlight"
              data-map-entry-id-param="<%= entry.id %>">
 
-          <div class="entry-row__thumb">
-            <% if entry.icon_image.attached? %>
+          <% if entry.icon_image.attached? %>
+            <button type="button" class="entry-row__thumb entry-row__thumb--clickable"
+                    title="View larger image"
+                    data-action="click->lightbox#open"
+                    data-lightbox-src-param="<%= url_for(entry.icon_image) %>"
+                    data-lightbox-caption-param="<%= entry.name %>">
               <%= image_tag entry.icon_image, class: "entry-row__thumb-img" %>
-            <% else %>
-              <%= entry.display_icon %>
-            <% end %>
-          </div>
+            </button>
+          <% else %>
+            <div class="entry-row__thumb"><%= entry.display_icon %></div>
+          <% end %>
 
           <div class="entry-row__info">
             <strong class="entry-row__name"><%= entry.name %></strong>

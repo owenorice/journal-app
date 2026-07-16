@@ -12,7 +12,7 @@
    <%= favicon_link_tag 'favicon.svg' %>
  </head>
 
- <body>
+ <body data-controller="lightbox" data-action="keydown.esc@window->lightbox#close">
    <% if notice.present? || alert.present? %>
      <div class="app-toast-container" data-controller="toast">
        <% if notice.present? %>
@@ -25,5 +25,12 @@
    <% end %>
    <%= render '/shared/navbar' %>
    <%= yield %>
+
+   <div class="lightbox" data-lightbox-target="overlay" data-action="click->lightbox#close" hidden>
+     <figure class="lightbox__figure">
+       <img class="lightbox__img" data-lightbox-target="image" alt="">
+       <figcaption class="lightbox__caption" data-lightbox-target="caption"></figcaption>
+     </figure>
+   </div>
  </body>
 </html>

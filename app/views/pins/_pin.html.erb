@@ -1,5 +1,6 @@
+<% urgency = pin.entry.watering_urgency %>
 <div id="pin-<%= pin.id %>"
-     class="map-pin"
+     class="map-pin<%= " map-pin--water-#{urgency}" if urgency %>"
      data-x-pct="<%= pin.x_percent %>"
      data-y-pct="<%= pin.y_percent %>"
      data-entry-id="<%= pin.entry_id %>"

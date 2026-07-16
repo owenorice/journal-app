@@ -73,4 +73,53 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_redirected_to new_user_session_path
   end
+
+  # --- Lightbox trigger contract on the index ---
+
+  test "entry with an attached icon image renders a lightbox trigger button" do
+    sign_in users(:one)
+    entry = entries(:one)
+    entry.update!(name: "Fiddle Leaf Fig")
+    # The view only builds a URL for the blob (no variant processing), so the
+    # payload just needs to be attachable bytes with an image content type.
+    entry.icon_image.attach(
+      io: StringIO.new("\x89PNG\r\n\x1a\ntiny-test-image".b),
+      filename: "icon.png",
+      content_type: "image/png"
+    )
+
+    get root_url
+    assert_response :success
+
+    card = "#entry-card-#{entry.id}"
+    assert_select "#{card} button.entry-row__thumb.entry-row__thumb--clickable", count: 1
+    assert_select "#{card} button.entry-row__thumb--clickable[data-action*=?]", "lightbox#open"
+    assert_select "#{card} button.entry-row__thumb--clickable[data-lightbox-src-param*=?]",
+                  "/rails/active_storage/blobs/"
+    assert_select "#{card} button.entry-row__thumb--clickable[data-lightbox-caption-param=?]",
+                  "Fiddle Leaf Fig"
+  end
+
+  test "entry without an icon image renders a plain thumb and no lightbox trigger" do
+    sign_in users(:one)
+    entry = entries(:two)
+
+    get root_url
+    assert_response :success
+
+    assert_select "#entry-card-#{entry.id}" do
+      assert_select "div.entry-row__thumb", text: entry.display_icon, count: 1
+      assert_select "button.entry-row__thumb--clickable", count: 0
+      assert_select "[data-action*=?]", "lightbox#open", count: 0
+    end
+  end
+
+  test "layout renders the lightbox overlay wired to the lightbox controller" do
+    sign_in users(:one)
+    get root_url
+    assert_response :success
+
+    assert_select "body[data-controller=?]", "lightbox"
+    assert_select ".lightbox[data-lightbox-target=?]", "overlay", count: 1
+  end
 end
