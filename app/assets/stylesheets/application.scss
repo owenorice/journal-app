@@ -203,6 +203,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   transform-origin: 0 0;
   will-change: transform;
+  opacity: 0; // hidden until the controller applies the first fit-to-view
 
   &__image {
     display: block;
@@ -211,6 +212,16 @@ h1, h2, h3, h4, h5, h6 {
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
+  }
+}
+
+// Reveal canvas and pins only once the fitted transform is in place,
+// so the map never paints unscaled at the image's natural size.
+.map-viewport--ready {
+  .map-canvas,
+  #pins-container {
+    opacity: 1;
+    transition: opacity 0.15s ease;
   }
 }
 
@@ -372,6 +383,7 @@ h1, h2, h3, h4, h5, h6 {
   position: absolute;
   inset: 0;
   overflow: visible;
+  opacity: 0; // hidden until the controller applies the first fit-to-view
   pointer-events: none;
 
   .map-pin {
