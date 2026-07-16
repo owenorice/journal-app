@@ -1,7 +1,9 @@
 class Entry < ApplicationRecord
   has_one :pin, dependent: :destroy
   has_one_attached :icon_image
+  belongs_to :last_modified_by, class_name: "User", optional: true
 
+  validates :name, presence: true
   validates :watering_frequency, numericality: { greater_than: 0, allow_nil: true }
 
   ICON_EMOJIS = %w[🌱 🌿 🍀 🌵 🌴 🌳 🌲 🪴 🌻 🌺 🌸 🌷 🌹 🪻 🍃 🌾 🎋 🎍 🍂 🍁].freeze
@@ -66,7 +68,7 @@ class Entry < ApplicationRecord
     watered + watering_frequency.days
   end
 
-  def water!
-    update!(last_watered_at: Time.current)
+  def water!(by: nil)
+    update!(last_watered_at: Time.current, last_modified_by: by || last_modified_by)
   end
 end
