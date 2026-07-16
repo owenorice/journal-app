@@ -9,13 +9,37 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+// ── Site palette ──
+$ink:   #1b1b19; // near-black: chrome, headings, body text
+$stone: #c8c8c8; // light gray: borders, muted surfaces
+$moss:  #89ae73; // green accent: primary actions, highlights
+$slate: #5b5c5c; // mid gray: secondary text and controls
+
+// Derived tints/shades (still the same four hues)
+$stone-light: mix(white, $stone, 60%); // subtle surfaces
+$stone-faint: mix(white, $stone, 80%); // hover washes
+$moss-deep:   mix(black, $moss, 25%);  // readable green for text/links
+$moss-wash:   mix(white, $moss, 85%);  // selected/active backgrounds
+
+// Bootstrap theme mapping (must precede the import)
+$primary:             $moss;
+$secondary:           $slate;
+$success:             $moss;
+$dark:                $ink;
+$light:               $stone-faint;
+$body-color:          $ink;
+$headings-color:      $ink;
+$border-color:        $stone;
+$link-color:          $moss-deep;
+$color-contrast-dark: $ink;
+
  @import "bootstrap";
 
 // Custom overrides for consistency
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
-  color: #333;
+  color: $ink;
   margin: 0;
   height: 100dvh;
   display: flex;
@@ -24,7 +48,7 @@ body {
 }
 
 .app-navbar {
-  background: #1a1a2e;
+  background: $ink;
   padding: 0;
   z-index: 1000;
 
@@ -47,7 +71,7 @@ body {
     text-decoration: none;
     color: #fff;
 
-    &:hover { color: #e0e0e0; }
+    &:hover { color: $stone; }
   }
 
   &__logo {
@@ -76,24 +100,24 @@ body {
     transition: background 0.15s ease, color 0.15s ease;
 
     &--primary {
-      background: #4a90d9;
-      color: #fff;
+      background: $moss;
+      color: $ink;
 
-      &:hover { background: #3a7bc8; color: #fff; }
+      &:hover { background: $moss-deep; color: #fff; }
     }
 
     &--ghost {
       background: transparent;
-      color: #adb5bd;
-      border: 1px solid #333;
+      color: $stone;
+      border: 1px solid $slate;
 
-      &:hover { color: #fff; border-color: #555; }
+      &:hover { color: #fff; border-color: $stone; }
     }
   }
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #000;
+  color: $ink;
 }
 
 .container {
@@ -115,8 +139,8 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     padding: 0.5rem;
     overflow: hidden;
-    border-right: 1px solid #dee2e6;
-    background: #f8f9fa;
+    border-right: 1px solid $stone;
+    background: $stone-faint;
   }
   &__entries {
     flex: 1 1 50%;
@@ -140,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
     &__map {
       flex: none;
       border-right: none;
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid $stone;
       height: 50vh;
       min-height: 250px;
     }
@@ -158,9 +182,9 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 2px solid #adb5bd;
+  border: 2px solid $stone;
   border-radius: 6px;
-  background: #e9ecef;
+  background: $stone-light;
   cursor: grab;
   touch-action: none;
 
@@ -168,8 +192,8 @@ h1, h2, h3, h4, h5, h6 {
 
   &--placing {
     cursor: crosshair !important;
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    border-color: $moss;
+    box-shadow: 0 0 0 3px rgba($moss, 0.35);
   }
 }
 
@@ -203,7 +227,7 @@ h1, h2, h3, h4, h5, h6 {
   &__btn {
     width: 30px;
     height: 30px;
-    border: 1px solid #adb5bd;
+    border: 1px solid $stone;
     border-radius: 4px;
     background: #fff;
     font-size: 1rem;
@@ -212,14 +236,14 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #333;
+    color: $ink;
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 
     &:hover {
-      background: #f0f0f0;
+      background: $stone-faint;
     }
     &:active {
-      background: #ddd;
+      background: $stone;
     }
   }
 }
@@ -230,7 +254,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;
-  background: rgba(0,0,0,0.75);
+  background: rgba($ink, 0.85);
   color: #fff;
   font-size: 0.75rem;
   padding: 0.3rem 0.7rem;
@@ -306,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   &--highlighted {
-    filter: drop-shadow(0 0 4px rgba(74, 144, 217, 0.6));
+    filter: drop-shadow(0 0 4px rgba($moss, 0.8));
     transform: translate(-50%, -100%) scale(1.15);
     transition: transform 0.15s ease, filter 0.15s ease;
     z-index: 20;
@@ -365,7 +389,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $stone-light;
   border-left: 3px solid transparent;
   border-radius: 4px;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -374,19 +398,19 @@ h1, h2, h3, h4, h5, h6 {
   &:last-child { border-bottom-color: transparent; }
 
   &:hover {
-    background: #f8f9fa;
+    background: $stone-faint;
   }
 
   &--active {
-    background: #eef4ff;
-    border-left-color: #4a90d9;
+    background: $moss-wash;
+    border-left-color: $moss;
   }
 
   &__thumb {
     flex-shrink: 0;
     width: 48px;
     height: 48px;
-    border: 1px solid #e9ecef;
+    border: 1px solid $stone-light;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -406,21 +430,21 @@ h1, h2, h3, h4, h5, h6 {
   &__name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #212529;
+    color: $ink;
   }
 
   &__meta {
     font-size: 0.72rem;
-    color: #868e96;
+    color: $slate;
   }
 
   &__water {
     font-size: 0.72rem;
-    color: #37b24d;
+    color: $moss-deep;
 
     &--needs { color: #e03131; }
 
-    small { color: #868e96; }
+    small { color: $slate; }
   }
 
   &__actions {
@@ -456,7 +480,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
     width: 100px;
     height: 100px;
-    border: 1px solid #dee2e6;
+    border: 1px solid $stone;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -495,7 +519,7 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
     width: 64px;
     height: 64px;
-    border: 1px solid #dee2e6;
+    border: 1px solid $stone;
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -530,7 +554,7 @@ h1, h2, h3, h4, h5, h6 {
   &__btn {
     width: 32px;
     height: 32px;
-    border: 1px solid #e9ecef;
+    border: 1px solid $stone-light;
     border-radius: 4px;
     background: #fff;
     font-size: 1.1rem;
@@ -542,14 +566,14 @@ h1, h2, h3, h4, h5, h6 {
     transition: border-color 0.1s, background 0.1s;
 
     &:hover {
-      border-color: #adb5bd;
-      background: #f8f9fa;
+      border-color: $stone;
+      background: $stone-faint;
     }
 
     &--selected {
-      border-color: #4a90d9;
-      background: #eef4ff;
-      box-shadow: 0 0 0 1px #4a90d9;
+      border-color: $moss;
+      background: $moss-wash;
+      box-shadow: 0 0 0 1px $moss;
     }
   }
 
@@ -603,7 +627,8 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 320px;
 
   &--info {
-    background: #198754;
+    background: $moss;
+    color: $ink;
   }
 
   &--danger {
