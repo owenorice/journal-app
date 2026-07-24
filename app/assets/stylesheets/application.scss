@@ -519,6 +519,12 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     gap: 0.5rem;
   }
+
+  &__modified-by {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    color: $slate;
+  }
 }
 
 // ── Icon picker ──

@@ -104,4 +104,26 @@ class EntryTest < ActiveSupport::TestCase
       assert_equal :thirsty, plant.watering_urgency
     end
   end
+
+  # --- Name presence validation ---
+
+  test "entry with a name is valid" do
+    assert_predicate entry, :valid?
+  end
+
+  test "entry with a nil name is invalid" do
+    subject = entry
+    subject.name = nil
+
+    assert_not subject.valid?
+    assert_includes subject.errors[:name], "can't be blank"
+  end
+
+  test "entry with a blank name is invalid" do
+    subject = entry
+    subject.name = "   "
+
+    assert_not subject.valid?
+    assert_includes subject.errors[:name], "can't be blank"
+  end
 end
